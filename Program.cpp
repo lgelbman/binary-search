@@ -9,7 +9,8 @@ using std::chrono::system_clock;
 using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::seconds;
-using std::chrono::milliseconds;
+using std::chrono::nanoseconds;
+
 
 using namespace std;
 
@@ -104,21 +105,32 @@ long long TimeFunc(Func f){
     auto begin = steady_clock::now();
     f();
     auto end = steady_clock::now();
-    return duration_cast<milliseconds>(end - begin).count();
+    return duration_cast<nanoseconds>(end - begin).count();
 }
 
-const int amountOfData = 10000000;
+const int amountOfData = 10000;
 int nums[amountOfData];
 std::list<int> linkedList;
 
 void timedLinkedBinarySearch() {
+
+    //loading data into list
     for (int i = 0; i < amountOfData; i++) {
+        linkedList.push_back(i);
+    }
+
+    for (int i = 0; i < 10; i++) {
         linkedBinarySearch(linkedList, i);
     }
 }
 
 void timedRecursiveBinarySearch() {
+
     for (int i = 0; i < amountOfData; i++) {
+        nums[i] = i;
+    }
+
+    for (int i = 0; i < 10; i++) {
         recursiveBinarySearch<int>(nums, amountOfData, i);
     }
 }
@@ -126,11 +138,7 @@ void timedRecursiveBinarySearch() {
 int main() {
     
     
-    std::list<int> list;
-    for (int i = 0; i < amountOfData; i++) {
-        list.push_back(i);
-        nums[i] = i;
-    }
+    
     long long timeForLinked = TimeFunc(timedLinkedBinarySearch);
     long long timeForRecursive = TimeFunc(timedRecursiveBinarySearch);
     std::cout << "linked: " << timeForLinked << std::endl;
